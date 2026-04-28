@@ -25,11 +25,7 @@ export default function RecruiterLogin() {
     if (!form.password) return setError('Password is required');
     setLoading(true);
     try {
-      const data = await loginUser(form);
-      if (data.user.role !== 'recruiter') {
-        toast.error('This is not a recruiter account');
-        return;
-      }
+      const data = await loginUser({ ...form, role: 'recruiter' });
       toast.success(`Welcome, ${data.user.name}!`);
       navigate('/recruiter/dashboard');
     } catch (err) {

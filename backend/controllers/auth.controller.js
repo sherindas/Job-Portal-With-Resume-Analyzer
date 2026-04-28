@@ -21,13 +21,21 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
     if (!email || !password)
       return res.status(400).json({ success: false, message: 'Email and password required' });
 
     const user = await User.findOne({ email }).select('+password').populate('company');
     if (!user || !(await user.matchPassword(password)))
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
+
+    // If a role is specified, enforce it — prevents recruiters logging in via job seeker page and vice versa
+    if (role && user.role !== role) {
+      const msg = role === 'jobseeker'
+        ? 'This account is a recruiter account. Please use the Recruiter login page.'
+        : 'This account is a job seeker account. Please use the Job Seeker login page.';
+      return res.status(403).json({ success: false, message: msg });
+    }
 
     res.json({ success: true, token: signToken(user._id), user });
   } catch (err) {

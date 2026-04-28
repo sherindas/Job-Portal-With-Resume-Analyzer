@@ -25,7 +25,7 @@ export default function Login() {
     if (!form.password) return setError('Password is required');
     setLoading(true);
     try {
-      const data = await loginUser(form);
+      const data = await loginUser({ ...form, role: 'jobseeker' });
       navigate(data.user.role === 'recruiter' ? '/recruiter/dashboard' : '/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid email or password');
