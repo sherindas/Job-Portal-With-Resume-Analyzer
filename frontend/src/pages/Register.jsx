@@ -6,6 +6,26 @@ import PasswordInput from '../components/PasswordInput';
 import PasswordStrengthBar from '../components/PasswordStrengthBar';
 import { validateEmail, validatePassword } from '../utils/validate';
 
+// Defined outside Register so it's never recreated on re-render
+function Field({ label, error, ok, children }) {
+  return (
+    <div>
+      <label className="label">{label}</label>
+      {children}
+      {error && (
+        <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+          <FiAlertCircle size={11} /> {error}
+        </p>
+      )}
+      {ok && !error && (
+        <p className="text-green-600 text-xs mt-1 flex items-center gap-1">
+          <FiCheckCircle size={11} /> Looks good
+        </p>
+      )}
+    </div>
+  );
+}
+
 export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '', role: 'jobseeker' });
   const [touched, setTouched] = useState({});
@@ -40,23 +60,6 @@ export default function Register() {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally { setLoading(false); }
   };
-
-  const Field = ({ label, error, ok, children }) => (
-    <div>
-      <label className="label">{label}</label>
-      {children}
-      {error && (
-        <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
-          <FiAlertCircle size={11} /> {error}
-        </p>
-      )}
-      {ok && !error && (
-        <p className="text-green-600 text-xs mt-1 flex items-center gap-1">
-          <FiCheckCircle size={11} /> Looks good
-        </p>
-      )}
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4 py-10">

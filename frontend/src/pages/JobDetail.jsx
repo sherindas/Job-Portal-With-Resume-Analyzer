@@ -160,6 +160,14 @@ export default function JobDetail() {
               <p className="text-sm text-gray-600">{job.company.description || 'No description available.'}</p>
               {job.company.industry && <p className="text-xs text-gray-400 mt-2">🏭 {job.company.industry}</p>}
               {job.company.location && <p className="text-xs text-gray-400">📍 {job.company.location}</p>}
+              {job.company._id && (
+                <Link
+                  to={`/companies/${job.company._id}`}
+                  className="mt-4 w-full inline-flex items-center justify-center gap-2 text-sm text-blue-600 border border-blue-200 rounded-xl px-4 py-2.5 hover:bg-blue-50 font-medium transition-colors"
+                >
+                  🏢 View all openings at {job.company.name}
+                </Link>
+              )}
             </div>
           )}
         </div>
