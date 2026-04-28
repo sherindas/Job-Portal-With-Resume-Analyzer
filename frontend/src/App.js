@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
+import { SocketProvider } from './context/SocketContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -18,6 +20,7 @@ import ResumeAnalyzer from './pages/ResumeAnalyzer';
 import SavedJobs from './pages/SavedJobs';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import CompanyProfile from './pages/CompanyProfile';
 
 import Messages from './pages/Messages';
 
@@ -37,9 +40,11 @@ function ScrollToTop() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ThemeProvider>
       <AuthProvider>
-        <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
-        <div className="flex flex-col min-h-screen">
+        <SocketProvider>
+          <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+          <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950 dark:text-gray-100 transition-colors">
           <ScrollToTop />
           <Navbar />
           <main className="flex-1">
@@ -52,6 +57,7 @@ export default function App() {
               <Route path="/jobs/:id" element={<JobDetail />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password/:token" element={<ResetPassword />} />
+              <Route path="/companies/:id" element={<CompanyProfile />} />
 
               {/* Job Seeker Protected */}
               <Route path="/dashboard" element={
@@ -90,8 +96,10 @@ export default function App() {
             </Routes>
           </main>
           <Footer />
-        </div>
+          </div>
+        </SocketProvider>
       </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
