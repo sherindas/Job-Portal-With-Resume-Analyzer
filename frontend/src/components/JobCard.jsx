@@ -32,8 +32,16 @@ export default function JobCard({ job, savedIds = [] }) {
           🏢
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors pr-8">{job.title}</h3>
-          <p className="text-sm text-gray-500 truncate">{job.company?.name || 'Company'}</p>
+          <h3 className="font-semibold text-gray-900 dark:text-white truncate group-hover:text-blue-600 transition-colors pr-8">{job.title}</h3>
+          {job.company?._id ? (
+            <Link to={`/companies/${job.company._id}`}
+              onClick={e => e.stopPropagation()}
+              className="text-sm text-blue-600 hover:underline truncate">
+              {job.company?.name || 'Company'}
+            </Link>
+          ) : (
+            <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{job.company?.name || 'Company'}</p>
+          )}
         </div>
         {/* Bookmark — top right, inside card, no overlap */}
         {user?.role === 'jobseeker' && (

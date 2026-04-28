@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FiMenu, FiX, FiUser, FiLogOut, FiGrid, FiTarget, FiBookmark, FiMessageCircle } from 'react-icons/fi';
+import { useTheme } from '../context/ThemeContext';
+import { FiMenu, FiX, FiUser, FiLogOut, FiGrid, FiTarget, FiBookmark, FiMessageCircle, FiSun, FiMoon } from 'react-icons/fi';
 import NotificationBell from './NotificationBell';
 import Logo from './Logo';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { dark, toggle } = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const isRecruiter = user?.role === 'recruiter';
@@ -14,7 +16,7 @@ export default function Navbar() {
   const handleLogout = () => { logout(); navigate('/'); setOpen(false); };
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-2">
@@ -32,6 +34,11 @@ export default function Navbar() {
 
           {user ? (
             <div className="flex items-center gap-2">
+              <button onClick={toggle}
+                className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                title={dark ? 'Light mode' : 'Dark mode'}>
+                {dark ? <FiSun size={18} /> : <FiMoon size={18} />}
+              </button>
               <NotificationBell />
               <div className="relative group">
                 <button className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900">
@@ -54,6 +61,10 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center gap-3">
+              <button onClick={toggle}
+                className="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                {dark ? <FiSun size={18} /> : <FiMoon size={18} />}
+              </button>
               <Link to="/login" className="btn-outline text-sm py-1.5 px-4">Login</Link>
               <Link to="/register" className="btn-primary text-sm py-1.5 px-4">Sign Up</Link>
               <div className="w-px h-5 bg-gray-200"/>
